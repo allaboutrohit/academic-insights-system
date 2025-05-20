@@ -23,6 +23,7 @@ const Exams = () => {
   const [isAddingResult, setIsAddingResult] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [currentExam, setCurrentExam] = useState<Exam | null>(null);
+  const [activeTab, setActiveTab] = useState("exams");
   
   const [examFormData, setExamFormData] = useState<Partial<Exam>>({
     name: "",
@@ -197,6 +198,7 @@ const Exams = () => {
   
   const viewExamResults = (exam: Exam) => {
     setCurrentExam(exam);
+    setActiveTab("results");
   };
 
   return (
@@ -403,7 +405,7 @@ const Exams = () => {
       
       <Card>
         <CardContent className="p-6">
-          <Tabs defaultValue="exams">
+          <Tabs defaultValue="exams" value={activeTab} onValueChange={setActiveTab}>
             <TabsList className="mb-4">
               <TabsTrigger value="exams">Exams</TabsTrigger>
               <TabsTrigger value="results">Results</TabsTrigger>
