@@ -6,10 +6,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/components/ui/use-toast";
-import { exams, examResults, students, assignments, assignmentSubmissions } from "@/data/mockData";
-import { BarChart } from "lucide-react";
+import { exams, students, assignments, assignmentSubmissions } from "@/data/mockData";
+import { ChartContainer } from "@/components/ui/chart";
+import { BarChart as ChartBarIcon } from "lucide-react";
 import { 
-  BarChart as ReBarChart, 
+  BarChart, 
   Bar, 
   LineChart, 
   Line, 
@@ -30,6 +31,10 @@ import {
   PolarRadiusAxis,
   Radar
 } from 'recharts';
+import { Exam, ExamResult } from "@/types";
+
+// Import the examResults from mockData
+import { examResults } from "@/data/mockData";
 
 const Analysis = () => {
   const { toast } = useToast();
@@ -133,14 +138,14 @@ const Analysis = () => {
       const exam = exams.find(e => e.id === selectedExam);
       if (!exam) return;
       
-      const examResults = examResults.filter(r => r.examId === selectedExam)
+      const specificResults = examResults.filter(r => r.examId === selectedExam)
         .map(result => ({
           name: result.studentName,
           marks: result.obtainedMarks,
           percentage: result.percentage
         }));
       
-      setExamSpecificData(examResults);
+      setExamSpecificData(specificResults);
     }
   }, [selectedExam]);
   
@@ -151,7 +156,7 @@ const Analysis = () => {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <BarChart className="h-6 w-6" />
+          <ChartBarIcon className="h-6 w-6" />
           <h1 className="text-2xl md:text-3xl font-bold">Performance Analysis</h1>
         </div>
       </div>
@@ -235,10 +240,8 @@ const Analysis = () => {
                       data={assignmentStatus}
                     >
                       <RadialBar
-                        minAngle={15}
                         label={{ position: 'insideStart', fill: '#fff' }}
                         background
-                        clockWise
                         dataKey="value"
                       />
                       <Legend iconSize={10} layout="vertical" verticalAlign="middle" wrapperStyle={{ lineHeight: '24px' }} />
